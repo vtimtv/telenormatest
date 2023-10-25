@@ -1,0 +1,16 @@
+{
+  "name": "vendor_name/www",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Skipper",
+      "email": "vlad.tymchuk@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "twig/twig":"^3.0"
+  }
+}
