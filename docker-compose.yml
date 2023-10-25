@@ -1,0 +1,54 @@
+version: "4"
+
+services:
+  telenormatest:
+    build:
+      context: .
+      dockerfile: DockerFile
+    networks:
+      - telenorma_network
+    image: telenormatestapp
+    container_name: telenormatest
+    restart: unless-stopped
+    volumes:
+      - ./app:/var/app
+
+
+  webservertelenorma:
+    build:
+      context: .
+      dockerfile: DockerFile_Nginx
+    networks:
+      - telenorma_network
+    image: nginx
+    container_name: webservertelenorma
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./app/www:/var/app/www
+      - ./config/nginx/:/etc/nginx/conf.d/
+    depends_on:
+      - telenormatest
+
+  telenormadb:
+    image: mariadb:10.6.4-focal
+    networks:
+      - telenorma_network
+    container_name: telenormadb
+    environment:
+      MYSQL_DATABASE: telenorma
+      MYSQL_ROOT_PASSWORD: r00tadmin
+    ports:
+      - "3307:3306"
+    volumes:
+      - "./db:/var/lib/mysql"
+
+
+volumes:
+  dbdata:
+    driver: local
+
+networks:
+  telenorma_network:
+    driver: bridge
